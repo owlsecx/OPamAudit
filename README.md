@@ -18,22 +18,18 @@
 
 ## 📌 Overview
 
-Offline Linux PAM configuration auditor (pam.d, pwquality, faillock, login.defs)
+OPamAudit is an offline, read-only Linux PAM configuration auditor. It parses pam.d/pam.conf stacks, resolves includes, simulates fail-open auth bypass, and audits companion files (pwquality, faillock, login.defs, sssd, ldap). Findings map to CIS Linux and NIST SP 800-53 with CWE/MITRE mapping and multi-format export.
 
 ---
 
 ## ✨ Features
 
-- Tolerant pam.d / pam.conf parser — line continuations, comments, '-' optional types, bracketed [value=action ...] controls, bracketed module arguments, legacy /etc/pam.conf format
-- Include resolver — include / substack / @include with loop detection and missing-target reporting
-- PAM state-machine simulator — evaluates auth and account stacks under "all credentials fail" to prove fail-open / authentication-bypass stacks
-- 65+ audit rules — nullok, pam_permit/pam_deny placement, weak hashing, faillock / tally2, pwquality / cracklib, pwhistory / remember, pam_env user_readenv, pam_exec / pam_python, LDAP / SSSD TLS, pam_wheel, debug leakage, services skipping common-* includes, rogue modules
-- Companion parsers — login.defs, pwquality.conf (+ .d), faillock.conf, pwhistory.conf, securetty, sssd.conf, nslcd.conf, ldap.conf, pam_env.conf
-- CIS Linux Benchmark & NIST SP 800-53 mapping, CWE + MITRE ATT&CK per finding
-- Offline --root mode for collected filesystem trees
-- Score / grade, TXT / MD / JSON / CSV / SARIF export
-- --demo self-test with synthetic vulnerable tree
-- Rich interactive menu + full CLI (CI gating)
+- Tolerant pam.d / pam.conf parser with continuations, optional types, bracketed controls, and include/substack resolution
+- PAM state-machine simulator proving fail-open / authentication-bypass stacks
+- 65+ rules: nullok, pam_permit/deny placement, weak hashing, faillock/tally2, pwquality/cracklib, pwhistory, pam_env, pam_exec
+- Companion parsers for login.defs, pwquality.conf, faillock.conf, pwhistory, securetty, sssd, nslcd, ldap.conf
+- Offline `--root` mode for collected filesystem trees; CIS & NIST mapping per finding
+- Score/grade, TXT/MD/JSON/CSV/SARIF export, `--demo` self-test, and CI fail-on gates
 
 ---
 
@@ -47,7 +43,10 @@ Offline Linux PAM configuration auditor (pam.d, pwquality, faillock, login.defs)
 ## 🚀 Usage
 
 ```bash
-./OPamAudit
+./OPamAudit --scan
+./OPamAudit --root ./fs --service sshd --simulate sshd --json -o pam.json
+./OPamAudit --demo --fail-on high
+./OPamAudit --help
 ```
 
 ---
